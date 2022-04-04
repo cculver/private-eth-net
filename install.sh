@@ -5,14 +5,14 @@ mkdir node1
 mkdir node2
 mkdir node3
 geth --datadir node1/ account new --password <(echo password)
-export node1=$(cat node1/keystore/* | jq -r ".address")
-echo "Node 1: $node1"
+NODE1=$(cat node1/keystore/* | jq -r ".address")
+echo "Node 1: $NODE1"
 geth --datadir node2/ account new --password <(echo password)
-export node2=$(cat node2/keystore/* | jq -r ".address")
-echo "Node 2: $node2"
+NODE2=$(cat node2/keystore/* | jq -r ".address")
+echo "Node 2: $NODE2"
 geth --datadir node3/ account new --password <(echo password)
-export node3=$(cat node3/keystore/* | jq -r ".address")
-echo "Node 3: $node3"
+NODE3=$(cat node3/keystore/* | jq -r ".address")
+echo "Node 3: $NODE3"
 
 ../automate_puppet.sh $node1 $node2 $node3
 
@@ -25,32 +25,35 @@ jq '.config.clique.period = 0' genesis.json|sponge genesis.json
 geth --datadir node1/ init genesis.json
 
 geth --nousb --datadir=node1/ --syncmode 'full' --port 30310 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8545 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node1" --password <(echo password) &
-export pid1=$(echo $!)
+PID1=$(echo $!)
 sleep 1
-kill $pid1
+kill $PID1
 
-export nodekey1=$(cat node1/geth/nodekey)
-export enode1="enode://$(bootnode -nodekeyhex $nodekey1 -writeaddress)@127.0.0.1:30310"
+NODEKEY1=$(cat node1/geth/nodekey)
+ENODE1="enode://$(bootnode -nodekeyhex $NODEKEY1 -writeaddress)@127.0.0.1:30310"
 
 geth --nousb --datadir=node2/ --syncmode 'full' --port 30311 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8546 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node2" --password <(echo password) &
-export pid2=$(echo $!)
+PID2=$(echo $!)
 sleep 1
-kill $pid2
+kill $PID2
 
-export nodekey2=$(cat node2/geth/nodekey)
-export enode2="enode://$(bootnode -nodekeyhex $nodekey2 -writeaddress)@127.0.0.1:30311"
+NODEKEY2=$(cat node2/geth/nodekey)
+ENODE2="enode://$(bootnode -nodekeyhex $NODEKEY2 -writeaddress)@127.0.0.1:30311"
 
 geth --nousb --datadir=node3/ --syncmode 'full' --port 30312 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8547 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node3" --password <(echo password) &
-export pid3=$(echo $!)
+PID3=$(echo $!)
 sleep 1
+kill $PID3
 
-export nodekey3=$(cat node3/geth/nodekey)
-export enode3="enode://$(bootnode -nodekeyhex $nodekey3 -writeaddress)@127.0.0.1:30312"
+NODEKEY3=$(cat node3/geth/nodekey)
+ENODE3="enode://$(bootnode -nodekeyhex $NODEKEY3 -writeaddress)@127.0.0.1:30312"
 
-kill $pid3
 
 touch static-nodes.json
-echo -e "[\n\t\"$enode1\",\n\t\"$enode2\",\n\t\"$enode3\"\n]" > static-nodes.json
+echo -e "[\n\t\"$ENODE1\",\n\t\"$ENODE2\",\n\t\"$ENODE3\"\n]" > static-nodes.json
+
+touch values.json
+echo -e "{\n\t\"ENODE1\": \"$ENODE1\",\n\t\"ENODE2\": \"$ENODE2\",\n\t\"ENODE3\": \"$ENODE3\",\n\t\"NODEKEY1\": \"$NODEKEY1\",\n\t\"NODEKEY2\": \"$NODEKEY2\",\n\t\"NODEKEY3\": \"$NODEKEY3\",\n\t\"NODE1\": \"$NODE1\",\n\t\"NODE2\": \"$NODE2\",\n\t\"NODE3\": \"$NODE3\"\n}" > values.json
 
 cp static-nodes.json node1
 cp static-nodes.json node2
