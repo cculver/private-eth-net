@@ -5,11 +5,11 @@ cd blockchain
 mkdir node1
 mkdir node2
 mkdir node3
-geth --datadir node1/ account new
+geth --datadir node1/ account new --password <(echo password)
 node1=$(cat node1/keystore/<tab> | jq -r ".address")
-geth --datadir node2/ account new
+geth --datadir node2/ account new --password <(echo password)
 node2=$(cat node2/keystore/<tab> | jq -r ".address")
-geth --datadir node3/ account new
+geth --datadir node3/ account new --password <(echo password)
 node3=$(cat node3/keystore/<tab> | jq -r ".address")
 
 ./automate_puppet.sh
