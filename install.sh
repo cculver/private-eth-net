@@ -14,7 +14,7 @@ geth --datadir node3/ account new --password <(echo password)
 NODE3=$(cat node3/keystore/* | jq -r ".address")
 echo "Node 3: $NODE3"
 
-../automate_puppet.sh $node1 $node2 $node3
+../automate_puppet.sh $NODE1 $NODE2 $NODE3
 
 # Errors are normal for Aleth & Parity chain specs
 
@@ -24,7 +24,7 @@ rm competence-harmony.json
 jq '.config.clique.period = 0' genesis.json|sponge genesis.json
 geth --datadir node1/ init genesis.json
 
-geth --nousb --datadir=node1/ --syncmode 'full' --port 30310 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8545 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node1" --password <(echo password) &
+geth --nousb --datadir=node1/ --syncmode 'full' --port 30310 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8545 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$NODE1" --password <(echo password) &
 PID1=$(echo $!)
 sleep 1
 kill $PID1
@@ -32,7 +32,7 @@ kill $PID1
 NODEKEY1=$(cat node1/geth/nodekey)
 ENODE1="enode://$(bootnode -nodekeyhex $NODEKEY1 -writeaddress)@127.0.0.1:30310"
 
-geth --nousb --datadir=node2/ --syncmode 'full' --port 30311 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8546 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node2" --password <(echo password) &
+geth --nousb --datadir=node2/ --syncmode 'full' --port 30311 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8546 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$NODE2" --password <(echo password) &
 PID2=$(echo $!)
 sleep 1
 kill $PID2
@@ -40,7 +40,7 @@ kill $PID2
 NODEKEY2=$(cat node2/geth/nodekey)
 ENODE2="enode://$(bootnode -nodekeyhex $NODEKEY2 -writeaddress)@127.0.0.1:30311"
 
-geth --nousb --datadir=node3/ --syncmode 'full' --port 30312 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8547 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node3" --password <(echo password) &
+geth --nousb --datadir=node3/ --syncmode 'full' --port 30312 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8547 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$NODE3" --password <(echo password) &
 PID3=$(echo $!)
 sleep 1
 kill $PID3
