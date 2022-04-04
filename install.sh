@@ -57,7 +57,7 @@ kill $pid3
 cd ..
 
 touch static-nodes.json
-echo -e "[\r\t\"enode://$enode1@127.0.0.1:30310\",\r\t\"enode://$enode2@127.0.0.1:30311\",\r\t\"enode://$enode3@127.0.0.1:30312\"\r]" > static-nodes.json
+echo -e "[\n\t\"enode://$enode1@127.0.0.1:30310\",\n\t\"enode://$enode2@127.0.0.1:30311\",\n\t\"enode://$enode3@127.0.0.1:30312\"\n]" > static-nodes.json
 
 cp static-nodes.json node1
 cp static-nodes.json node2
