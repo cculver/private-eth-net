@@ -29,7 +29,7 @@ export pid1=$(echo $!)
 sleep 1
 kill $pid1
 
-export nodekey1=$(cat geth/nodekey)
+export nodekey1=$(cat node1/geth/nodekey)
 export enode1="enode://$(bootnode -nodekeyhex $nodekey1 -writeaddress)@127.0.0.1:30310"
 
 geth --nousb --datadir=node2/ --syncmode 'full' --port 30311 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8546 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node2" --password <(echo password) &
@@ -37,19 +37,17 @@ export pid2=$(echo $!)
 sleep 1
 kill $pid2
 
-export nodekey2=$(cat geth/nodekey)
+export nodekey2=$(cat node2/geth/nodekey)
 export enode2="enode://$(bootnode -nodekeyhex $nodekey2 -writeaddress)@127.0.0.1:30311"
 
 geth --nousb --datadir=node3/ --syncmode 'full' --port 30312 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8547 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node3" --password <(echo password) &
 export pid3=$(echo $!)
 sleep 1
 
-export nodekey3=$(cat geth/nodekey)
+export nodekey3=$(cat node3/geth/nodekey)
 export enode3="enode://$(bootnode -nodekeyhex $nodekey3 -writeaddress)@127.0.0.1:30312"
 
 kill $pid3
-
-cd ..
 
 touch static-nodes.json
 echo -e "[\n\t\"$enode1\",\n\t\"$enode2\",\n\t\"$enode3\"\n]" > static-nodes.json
