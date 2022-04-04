@@ -24,40 +24,35 @@ rm competence-harmony.json
 jq '.config.clique.period = 0' genesis.json|sponge genesis.json
 geth --datadir node1/ init genesis.json
 
-cd node1
-geth --nousb --datadir=$pwd --syncmode 'full' --port 30310 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8545 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node1" --password <(echo password) &
+geth --nousb --datadir=node1/ --syncmode 'full' --port 30310 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8545 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node1" --password <(echo password) &
 export pid1=$(echo $!)
 sleep 1
 kill $pid1
 
 export nodekey1=$(cat geth/nodekey)
-export enode1=$(bootnode -nodekeyhex $nodekey1 -writeaddress)
+export enode1="enode://$(bootnode -nodekeyhex $nodekey1 -writeaddress)@127.0.0.1:30310"
 
-cd ..
-cd node2
-geth --nousb --datadir=$pwd --syncmode 'full' --port 30311 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8546 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node2" --password <(echo password) &
+geth --nousb --datadir=node2/ --syncmode 'full' --port 30311 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8546 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node2" --password <(echo password) &
 export pid2=$(echo $!)
 sleep 1
 kill $pid2
 
 export nodekey2=$(cat geth/nodekey)
-export enode2=$(bootnode -nodekeyhex $nodekey2 -writeaddress)
+export enode2="enode://$(bootnode -nodekeyhex $nodekey2 -writeaddress)@127.0.0.1:30311"
 
-cd ..
-cd node3
-geth --nousb --datadir=$pwd --syncmode 'full' --port 30312 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8547 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node3" --password <(echo password) &
+geth --nousb --datadir=node3/ --syncmode 'full' --port 30312 --miner.gasprice 0 --miner.gastarget 470000000000 --http --http.addr 'localhost' --http.port 8547 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$node3" --password <(echo password) &
 export pid3=$(echo $!)
 sleep 1
 
 export nodekey3=$(cat geth/nodekey)
-export enode3=$(bootnode -nodekeyhex $nodekey3 -writeaddress)
+export enode3="enode://$(bootnode -nodekeyhex $nodekey3 -writeaddress)@127.0.0.1:30312"
 
 kill $pid3
 
 cd ..
 
 touch static-nodes.json
-echo -e "[\n\t\"enode://$enode1@127.0.0.1:30310\",\n\t\"enode://$enode2@127.0.0.1:30311\",\n\t\"enode://$enode3@127.0.0.1:30312\"\n]" > static-nodes.json
+echo -e "[\n\t\"$enode1\",\n\t\"$enode2\",\n\t\"$enode3\"\n]" > static-nodes.json
 
 cp static-nodes.json node1
 cp static-nodes.json node2
