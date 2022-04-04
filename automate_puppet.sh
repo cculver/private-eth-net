@@ -1,5 +1,9 @@
 #!/usr/bin/expect -f
-spawn ./bin/puppeth --network competence
+set NODE1 [lindex $argv 0]
+set NODE2 [lindex $argv 1]
+set NODE3 [lindex $argv 2]
+
+spawn /usr/bin/puppeth --network competence
 expect "What would you like to do? (default = stats)"
 send "2\r"
 expect "What would you like to do? (default = create)"
@@ -9,25 +13,19 @@ send "2\r"
 expect "How many seconds should blocks take? (default = 15)"
 send "0\r"
 expect "Which accounts are allowed to seal? (mandatory at least one)"
-send $env(node1)
-send "\r"
+send "$NODE1\r"
 expect "0x"
-send $env(node2)
-send "\r"
+send "$NODE2\r"
 expect "0x"
-send $env(node3)
-send "\r"
+send "$NODE3\r"
 expect "0x"
 send "\r"
 expect "Which accounts should be pre-funded? (advisable at least one)"
-send $env(node1)
-send "\r"
+send "$NODE1\r"
 expect "0x"
-send $env(node2)
-send "\r"
+send "$NODE2\r"
 expect "0x"
-send $env(node3)
-send "\r"
+send "$NODE3\r"
 expect "0x"
 send "\r"
 expect "Should the precompile-addresses (0x1 .. 0xff) be pre-funded with 1 wei? (advisable yes)"
