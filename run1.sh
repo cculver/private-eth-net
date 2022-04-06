@@ -10,7 +10,7 @@ geth --datadir=./blockchain/node1/ \
 	 --networkid 1515 \
 	 --miner.gasprice 0 \
 	 --http \
-	 --http.addr 'localhost' \
+	 --http.addr '127.0.0.1' \
 	 --http.corsdomain '*' \
 	 --http.port 8545 \
 	 --http.vhosts '*' \
