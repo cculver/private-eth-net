@@ -64,4 +64,6 @@ rm static-nodes.json
 
 cd ..
 
-./run.sh
+./run2.sh
+
+./run1.sh
