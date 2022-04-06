@@ -20,7 +20,9 @@ geth --datadir=./blockchain/node1/ \
 	 --unlock "0x$NODE1" \
 	 --password <(echo password) &
 
-geth --datadir=./blockchain/node1/ --syncmode 'full' --networkid 1515 --port 30310 --miner.threads 1 --miner.gasprice 1 --http --http.addr 'localhost' --http.port 8545 --http.api admin,eth,miner,net,txpool,personal,web3 --mine --allow-insecure-unlock --unlock "0x$NODE1" --password <(echo password) &
 PID1=$(echo $!)
+
+touch running.json
+jq '.GETH1 = $PID1' running.json|sponge running.json
 
 echo "Node 1 started"

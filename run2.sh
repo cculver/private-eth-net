@@ -22,4 +22,7 @@ geth --datadir=./blockchain/node2/ \
 	 
 PID2=$(echo $!)
 
+touch running.json
+jq '.GETH2 = $PID2' running.json|sponge running.json
+
 echo "Node 2 started"
