@@ -1,7 +1,7 @@
 #!/usr/bin/expect -f
 set NODE1 [lindex $argv 0]
 set NODE2 [lindex $argv 1]
-set NODE3 [lindex $argv 2]
+#set NODE3 [lindex $argv 2]
 
 spawn /usr/bin/puppeth --network competence
 expect "What would you like to do? (default = stats)"
@@ -17,16 +17,16 @@ send "$NODE1\r"
 expect "0x"
 send "$NODE2\r"
 expect "0x"
-send "$NODE3\r"
-expect "0x"
+#send "$NODE3\r"
+#expect "0x"
 send "\r"
 expect "Which accounts should be pre-funded? (advisable at least one)"
 send "$NODE1\r"
 expect "0x"
 send "$NODE2\r"
 expect "0x"
-send "$NODE3\r"
-expect "0x"
+#send "$NODE3\r"
+#expect "0x"
 send "\r"
 expect "Should the precompile-addresses (0x1 .. 0xff) be pre-funded with 1 wei? (advisable yes)"
 send "yes\r"
